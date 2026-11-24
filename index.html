@@ -1,0 +1,1459 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Korean Vocabulary World</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#3f56c4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Korean Words">
+<meta name="description" content="Korean Vocabulary World — learn Korean words with lists, flashcards, quizzes and listening.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+/* Layout: category sidebar (chips on phones) + one working area with List / Cards / Quiz / Listening.
+   Cards, Quiz and Listening fit one screen (html.fit): nothing scrolls. No scrollbar is ever drawn.
+   Each topic group owns one soft tint; word cards, chips and tabs take it from data-g. */
+:root{
+  --bg:#f4f6f9; --surface:#ffffff; --fg:#1c2230; --muted:#5d6678; --line:#dde2ea;
+  --accent:#3f56c4; --accent-ink:#ffffff;
+  --ok-bg:#dff3e5; --ok-ink:#1f6a3a; --bad-bg:#fbe3e6; --bad-ink:#9a2d40;
+  --time-bg:#e4edfa; --time-ink:#274a82; --time-ac:#6c93d6;
+  --num-bg:#fbe6eb;  --num-ink:#8a3349;  --num-ac:#da8a9d;
+  --desc-bg:#fbf0d3; --desc-ink:#715410; --desc-ac:#d6ae44;
+  --act-bg:#e0f2e5;  --act-ink:#276539;  --act-ac:#6bb380;
+  --gram-bg:#ebe6f8; --gram-ink:#4f3b8c; --gram-ac:#9883d6;
+  --life-bg:#fde8da; --life-ink:#84451f; --life-ac:#e29d6f;
+  --kr:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --ui:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141b; --surface:#191d27; --fg:#e7eaf1; --muted:#9aa3b6; --line:#2a3041;
+    --accent:#93a5f2; --accent-ink:#11141b;
+    --ok-bg:#1c3326; --ok-ink:#a6dbb7; --bad-bg:#3b1f27; --bad-ink:#f0b3bf;
+    --time-bg:#1d2a43; --time-ink:#b5cdf3; --time-ac:#6c93d6;
+    --num-bg:#3a2029;  --num-ink:#f0bcc8;  --num-ac:#da8a9d;
+    --desc-bg:#38301a; --desc-ink:#eed48a; --desc-ac:#d6ae44;
+    --act-bg:#1c3425;  --act-ink:#a8dcb8;  --act-ac:#6bb380;
+    --gram-bg:#2a2442; --gram-ink:#cabef0; --gram-ac:#9883d6;
+    --life-bg:#3a2819; --life-ink:#f2c3a1; --life-ac:#e29d6f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11141b; --surface:#191d27; --fg:#e7eaf1; --muted:#9aa3b6; --line:#2a3041;
+  --accent:#93a5f2; --accent-ink:#11141b;
+  --ok-bg:#1c3326; --ok-ink:#a6dbb7; --bad-bg:#3b1f27; --bad-ink:#f0b3bf;
+  --time-bg:#1d2a43; --time-ink:#b5cdf3; --time-ac:#6c93d6;
+  --num-bg:#3a2029;  --num-ink:#f0bcc8;  --num-ac:#da8a9d;
+  --desc-bg:#38301a; --desc-ink:#eed48a; --desc-ac:#d6ae44;
+  --act-bg:#1c3425;  --act-ink:#a8dcb8;  --act-ac:#6bb380;
+  --gram-bg:#2a2442; --gram-ink:#cabef0; --gram-ac:#9883d6;
+  --life-bg:#3a2819; --life-ink:#f2c3a1; --life-ac:#e29d6f;
+  color-scheme:dark;
+}
+[data-g="time"]{--gbg:var(--time-bg);--gink:var(--time-ink);--gac:var(--time-ac)}
+[data-g="num"]{--gbg:var(--num-bg);--gink:var(--num-ink);--gac:var(--num-ac)}
+[data-g="desc"]{--gbg:var(--desc-bg);--gink:var(--desc-ink);--gac:var(--desc-ac)}
+[data-g="act"]{--gbg:var(--act-bg);--gink:var(--act-ink);--gac:var(--act-ac)}
+[data-g="gram"]{--gbg:var(--gram-bg);--gink:var(--gram-ink);--gac:var(--gram-ac)}
+[data-g="life"]{--gbg:var(--life-bg);--gink:var(--life-ink);--gac:var(--life-ac)}
+
+/* scrolling still works, scrollbars are never drawn */
+*{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{display:none;width:0;height:0}
+
+*{box-sizing:border-box}
+html.fit,html.fit body{height:100%;overflow:hidden}
+body{
+  background:var(--bg);color:var(--fg);font:15px/1.5 var(--ui);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:22px 56px;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+/* smooth press feedback on every button (transform only, so nothing shifts or jumps) */
+.btn,.opt,.tab,.nv,.ib,.tbtn,.chip,.spk{transition:transform .12s ease,background-color .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease,opacity .2s ease}
+.btn:active,.opt:active:not(:disabled),.tab:active,.nv:active,.ib:active,.tbtn:active,.chip:active,.spk:active{transform:scale(.96)}
+/* game screens fade/slide in instead of snapping (list stays instant, so search typing never lags) */
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fc-wrap,.qz{animation:viewIn .28s cubic-bezier(.22,.8,.3,1) both}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:1220px;margin:0 auto;display:grid;grid-template-columns:268px minmax(0,1fr);gap:8px 30px;align-items:start}
+html.fit .app{height:100%;grid-template-rows:auto minmax(0,1fr)}
+
+/* header */
+.top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 28px;padding-bottom:18px}
+.top h1{margin:0;font-size:1.65rem;line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+.top-r{display:flex;align-items:flex-end;gap:16px;flex:0 1 auto;min-width:0}
+.tbtn{width:42px;height:42px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--fg);display:grid;place-items:center;padding:0}
+@media (hover:hover){.tbtn:hover{border-color:var(--accent)}}
+.tbtn .sun{display:none}
+.tbtn[data-eff="dark"] .sun{display:block}
+.tbtn[data-eff="dark"] .moon{display:none}
+.prog{min-width:min(280px,100%);flex:0 1 340px}
+.prog-row{display:flex;justify-content:space-between;gap:12px;font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.prog-row b{color:var(--fg);font-weight:600}
+.bar-bg{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}
+.bar-fg{height:100%;width:0;border-radius:99px;background:var(--accent);transition:width .35s}
+
+/* nav */
+nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);max-height:calc(100vh - 32px);overflow:auto;padding-right:4px;display:flex;flex-direction:column;gap:14px;align-self:start}
+.grp{display:flex;flex-direction:column;gap:2px}
+.grp-h{display:flex;align-items:center;gap:8px;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 10px 4px}
+.grp-h i{width:10px;height:10px;border-radius:3px;background:var(--gac)}
+.nv{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:8px 10px;color:var(--fg)}
+@media (hover:hover){.nv:hover{background:var(--surface)}}
+.nv .dot{width:9px;height:9px;border-radius:50%;background:var(--gac);flex:none}
+.nv .nn{flex:1;min-width:0}
+.nv .nc{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.nv[aria-current="true"]{background:var(--gbg);color:var(--gink);font-weight:600}
+.nv[aria-current="true"] .nc{color:var(--gink)}
+.nv.all{font-weight:600;background:var(--surface);border:1px solid var(--line)}
+.nv.all[aria-current="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.nv.all[aria-current="true"] .nc{color:var(--accent-ink)}
+
+/* main */
+main{min-width:0;display:flex;flex-direction:column;gap:14px}
+html.fit main{min-height:0}
+html.fit #view{flex:1;min-height:0;display:flex;flex-direction:column}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 18px;font-weight:600;font-size:.9rem}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tab .ti{display:none}
+
+/* controls */
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl input[type=search]{flex:1 1 220px;max-width:360px;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px}
+.chip,.ctl label,.ctl select{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;position:relative;white-space:nowrap}
+.ctl label input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.ctl label:has(input:checked),.chip[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent);border-color:transparent}
+.ctl label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.ctl select{padding-right:10px}
+.scope{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.scope b{color:var(--fg)}
+
+/* list: thin one-line rows */
+.cat{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.cat+.cat{margin-top:20px}
+.cat h2{margin:0;display:flex;align-items:center;gap:10px;font-size:1.05rem}
+.cat h2 .pill{background:var(--gbg);color:var(--gink);border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:600}
+.cat h2 .cnt{font-size:.8rem;font-weight:500;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:8px}
+.w{background:var(--gbg);color:var(--gink);border-radius:12px;padding:6px 8px 6px 14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) auto;align-items:center;gap:2px 12px;min-width:0;transition:opacity .2s}
+.w .ex{grid-column:1/-1;padding-bottom:4px}
+.kr{font:500 1.2rem/1.3 var(--kr);overflow-wrap:anywhere}
+.uz{font-weight:600;font-size:.92rem;overflow-wrap:anywhere}
+.ex{font-size:.8rem;opacity:.8;overflow-wrap:anywhere}
+.tools{display:flex;gap:4px;flex:none}
+.ib{width:32px;height:32px;border-radius:50%;border:1px solid color-mix(in srgb,var(--gink) 25%,transparent);background:color-mix(in srgb,var(--surface) 55%,transparent);display:grid;place-items:center;padding:0;font-size:.85rem;color:var(--gink)}
+@media (hover:hover){.ib:hover{background:var(--surface)}}
+.chk[aria-pressed="true"]{background:var(--gink);color:var(--gbg);border-color:var(--gink)}
+.w.is-known{opacity:.62}
+.hide-uz .w:not(.show) .uz,.hide-uz .w:not(.show) .ex{filter:blur(7px);user-select:none}
+.hide-uz .w:not(.show){cursor:pointer}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:14px}
+
+/* game screens: one centered column, sized to fit */
+.fc-wrap,.qz{flex:1;min-height:0;min-width:0;width:100%;max-width:520px;margin-inline:auto;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:32px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.hud b{color:var(--fg);font-weight:600}
+.chip.sm{min-height:32px;padding:4px 12px;font-size:.78rem}
+
+/* flashcards */
+.fc-card{flex:0 1 clamp(230px,48vh,420px);min-height:0;width:100%;border:0;border-radius:24px;background:var(--gbg);color:var(--gink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;overflow:hidden}
+.fc-big{font:500 clamp(1.9rem,8vw,3.2rem)/1.2 var(--kr);overflow-wrap:anywhere}
+.fc-big.uz-big{font-family:var(--ui);font-weight:700;font-size:clamp(1.4rem,5.5vw,2.1rem)}
+.fc-big.small{font-size:1.6rem}
+.fc-card .ex{font-size:.9rem}
+.fc-btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.fc-btns.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:10px 8px;font-weight:600;min-height:50px;min-width:0}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ok{background:var(--ok-bg);color:var(--ok-ink);border-color:transparent}
+.btn.bad{background:var(--bad-bg);color:var(--bad-ink);border-color:transparent}
+
+/* quiz + listening */
+.qz-q{flex:0 1 clamp(200px,36vh,330px);min-height:0;background:var(--gbg);color:var(--gink);border-radius:24px;padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden}
+.qz-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(72px,auto);gap:10px}
+.opt{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:10px 12px;text-align:center;font-weight:600;font-size:1rem;line-height:1.25;overflow-wrap:anywhere;display:grid;place-items:center}
+.opt.kro{font:500 1.2rem/1.25 var(--kr)}
+@media (hover:hover){.opt:hover:not(:disabled){border-color:var(--accent)}}
+.opt.right{background:var(--ok-bg);color:var(--ok-ink);border-color:transparent}
+.opt.wrong{background:var(--bad-bg);color:var(--bad-ink);border-color:transparent}
+.opt:disabled{cursor:default;color:var(--fg)}
+.opt.right:disabled{color:var(--ok-ink)}
+.opt.wrong:disabled{color:var(--bad-ink)}
+.spk{width:88px;height:88px;border-radius:50%;border:0;background:color-mix(in srgb,var(--gink) 14%,transparent);color:var(--gink);display:grid;place-items:center;padding:0}
+.spk:active{transform:scale(.96)}
+.score{font-size:2.4rem;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.wrong-list{display:grid;gap:6px;margin:0;padding:0;list-style:none;width:100%;max-width:420px}
+.wrong-list li{background:color-mix(in srgb,var(--surface) 60%,transparent);border-radius:10px;padding:6px 12px;display:flex;justify-content:space-between;gap:10px;text-align:left}
+.wrong-list .kr{font-size:1.05rem}
+
+@media (max-width:820px){
+  body{padding-block:14px calc(104px + env(safe-area-inset-bottom,0px))}
+  .app{display:block}
+  /* game screens sit in a fixed frame between the status bar and the tab bar, so the page can never scroll */
+  html.fit .app{position:fixed;top:env(safe-area-inset-top,0px);bottom:calc(84px + env(safe-area-inset-bottom,0px));left:0;right:0;width:auto;max-width:none;height:auto;margin:0;display:flex;flex-direction:column;
+    padding:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+  .top{padding-bottom:12px;align-items:center;gap:10px}
+  html.fit .top{flex:none;padding-bottom:6px}
+  .top h1{font-size:1.3rem;flex:1 1 0;min-width:0}
+  .top-r{display:contents}
+  .tbtn{order:1;width:44px;height:44px}
+  .prog{order:2;flex:1 1 100%}
+  html.fit .prog{display:none}
+
+  /* category chips pinned under the status bar */
+  nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);align-self:stretch;min-width:0;max-height:none;overflow-x:auto;overflow-y:hidden;flex-direction:row;gap:8px;
+    margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+    padding:8px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));
+    border-bottom:1px solid var(--line)}
+  html.fit nav{position:static;flex:none;padding-top:4px;padding-bottom:8px}
+  .grp{display:contents}
+  .grp-h{display:none}
+  .nv{width:auto;flex:none;white-space:nowrap;min-height:40px;border:0;border-radius:999px;padding:8px 15px;background:var(--gbg);color:var(--gink)}
+  html.fit .nv{min-height:36px;padding:6px 14px}
+  @media (hover:hover){.nv:hover{background:var(--gbg)}}
+  .nv .dot,.nv .nc{display:none}
+  .nv[aria-current="true"]{box-shadow:inset 0 0 0 2px var(--gink);font-weight:600}
+  .nv.all{background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+  .nv.all[aria-current="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);box-shadow:none}
+
+  main{margin-top:12px;gap:10px;width:100%}
+  html.fit main{flex:1;min-height:0;margin-top:8px}
+  html.fit .scope{display:none}
+
+  /* floating pill tab bar */
+  .tabs{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));margin-inline:auto;max-width:400px;z-index:20;flex-wrap:nowrap;gap:2px;padding:6px;border-radius:999px;
+    background:color-mix(in srgb,var(--surface) 78%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);
+    border:1px solid color-mix(in srgb,var(--line) 80%,transparent);box-shadow:0 10px 30px rgba(15,20,40,.16),0 2px 6px rgba(15,20,40,.08)}
+  .tab{flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;background:transparent;border-radius:999px;padding:5px 2px;font-size:.62rem;font-weight:600;letter-spacing:.01em;color:var(--muted)}
+  .tab .ti{display:block;line-height:0}
+  .tab[aria-selected="true"]{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent)}
+
+  .ctl input[type=search]{flex:1 1 100%;max-width:none;min-height:46px;font-size:16px}
+  .ctl select{font-size:.82rem}
+
+  .grid{grid-template-columns:minmax(0,1fr);gap:6px}
+  .w{padding:4px 6px 4px 14px}
+  .kr{font-size:1.15rem}
+  .uz{font-size:.9rem}
+  .ib{width:36px;height:36px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app" id="app">
+  <header class="top">
+    <h1>Korean Vocabulary World</h1>
+    <div class="top-r">
+      <div class="prog" aria-live="polite">
+        <div class="prog-row"><span><b id="pk">0</b> / <span id="pt">0</span> so'z yodlandi</span><b id="pp">0%</b></div>
+        <div class="bar-bg"><div class="bar-fg" id="pb"></div></div>
+      </div>
+      <button class="tbtn" id="install" type="button" hidden aria-label="Ilovani o'rnatish" title="Ilovani o'rnatish">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/></svg>
+      </button>
+      <button class="tbtn" id="theme" type="button" aria-label="Qorong'i rejimga o'tish">
+        <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+  <div id="installHint" class="empty" hidden style="grid-column:1/-1;margin-top:10px">iPhone / iPad'da o'rnatish: pastdagi <b>Share</b> tugmasini bosing → <b>Add to Home Screen</b> ni tanlang.</div>
+
+  <nav id="nav" aria-label="Mavzular"></nav>
+
+  <main id="main" data-view="list">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-act="view" data-v="list" aria-selected="true"><span class="ti" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg></span>Ro'yxat</button>
+      <button class="tab" role="tab" data-act="view" data-v="cards" aria-selected="false"><span class="ti" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="13" rx="2.5"/><path d="M7 4h12a2 2 0 0 1 2 2v9"/></svg></span>Kartochkalar</button>
+      <button class="tab" role="tab" data-act="view" data-v="quiz" aria-selected="false"><span class="ti" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8 5.2-5.6"/></svg></span>Test</button>
+      <button class="tab" role="tab" data-act="view" data-v="listen" aria-selected="false"><span class="ti" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span>Tinglash</button>
+    </div>
+    <div class="ctl">
+      <input data-for="list" id="q" type="search" placeholder="Qidirish" aria-label="Qidiruv">
+      <label data-for="list"><input type="checkbox" id="hideUz"> Tarjimani yashirish</label>
+      <label data-for="list cards"><input type="checkbox" id="onlyUnknown"> Bilmaganlarim</label>
+      <label data-for="cards"><input type="checkbox" id="shuffle"> Aralash</label>
+      <select data-for="cards quiz" id="dir" aria-label="Yo'nalish"><option value="kr">Koreys → O'zbek</option><option value="uz">O'zbek → Koreys</option></select>
+      <span class="scope" data-for="list" id="scope"></span>
+      <button class="chip" data-for="list" id="expJson" type="button">⬇ JSON saqlash</button>
+      <button class="chip" data-for="list" id="impJson" type="button">⬆ JSON yuklash</button>
+      <span class="scope" data-for="list" id="ioMsg" aria-live="polite"></span>
+    </div>
+    <input type="file" id="impFile" accept=".json,application/json" hidden>
+    <div id="view"></div>
+  </main>
+</div>
+
+<script>
+const GROUPS={time:'Vaqt va tabiat',num:'Raqamlar',desc:'Tavsif',act:'Harakat',gram:'Grammatika',life:'Kundalik hayot'};
+
+/* Format: "#group|emoji|Category" starts a category; then "korean|uzbek||example" per line. */
+const DATA=`
+#time|🌸|Fasllar
+봄|Bahor||봄을 좋아해요. — Men bahorni yoqtiraman.
+여름|Yoz
+가을|Kuz
+겨울|Qish||겨울에는 추워요. — Qishda sovuq bo'ladi.
+계절|Fasl
+날씨|Ob-havo
+봄날|Bahor kuni
+여름날|Yoz kuni
+가을날|Kuz kuni
+겨울날|Qish kuni
+#time|🗓️|Oylar
+1월 (일월)|Yanvar
+2월 (이월)|Fevral
+3월 (삼월)|Mart
+4월 (사월)|Aprel
+5월 (오월)|May||제 생일은 5월이에요. — Mening tug'ilgan kunim may oyida.
+6월 (유월)|Iyun||Istisno: 육월 emas, 유월 deb aytiladi.
+7월 (칠월)|Iyul
+8월 (팔월)|Avgust
+9월 (구월)|Sentabr
+10월 (시월)|Oktabr||Istisno: 십월 emas, 시월 deb aytiladi.
+11월 (십일월)|Noyabr
+12월 (십이월)|Dekabr
+#time|📅|Hafta kunlari
+월요일|Dushanba||Oy kuni (月)
+화요일|Seshanba||Olov kuni (火)
+수요일|Chorshanba||Suv kuni (水)
+목요일|Payshanba||Daraxt kuni (木)
+금요일|Juma||Oltin kuni (金)
+토요일|Shanba||Tuproq kuni (土)
+일요일|Yakshanba||Quyosh kuni (日)
+평일|Ish kunlari
+주말|Dam olish kunlari
+매일|Har kuni
+매주|Har hafta
+매달|Har oy
+매년|Har yili
+오늘 무슨 요일이에요?|Bugun haftaning qaysi kuni?
+#time|⏰|Soat va vaqt
+시간|Vaqt / soat
+시|Soat (… soat)||Soat = sof koreys raqam + 시
+분|Daqiqa||Daqiqa = xitoy-koreys raqam + 분
+초|Soniya
+오전|Tushdan oldin (AM)
+오후|Tushdan keyin (PM)
+아침|Ertalab
+점심|Tush payti / tushlik
+낮|Kunduz
+저녁|Kechqurun
+밤|Tun
+새벽|Tong sahar
+자정|Yarim tun
+정오|Tush payti, 12:00
+하루|Bir kun
+반|Yarim
+일찍|Erta
+늦게|Kech
+제시간에|O'z vaqtida
+시간표|Jadval
+일정|Reja / jadval
+한 시|Soat bir
+두 시|Soat ikki
+세 시 반|Soat uch yarim
+네 시 십 분|Soat 4:10
+다섯 시 오십 분|Soat 5:50
+오전 아홉 시|Ertalab soat 9
+오후 세 시|Kunduzi soat 3
+#time|🕰️|Vaqt ifodalari
+그저께|Kechadan oldingi kun
+어제|Kecha
+오늘|Bugun
+내일|Ertaga
+모레|Indinga
+지금|Hozir
+이번 주|Bu hafta
+지난주|O'tgan hafta
+다음 주|Keyingi hafta
+이번 달|Bu oy
+지난달|O'tgan oy
+다음 달|Keyingi oy
+올해|Bu yil
+작년|O'tgan yil
+내년|Keyingi yil
+과거|O'tmish
+현재|Hozirgi vaqt
+미래|Kelajak
+나중에|Keyinroq
+곧|Tez orada
+잠시 후|Birozdan keyin
+방금|Hozirgina
+아까|Biroz oldin
+항상|Har doim
+언제나|Doimo
+가끔|Ba'zan
+때때로|Vaqti-vaqti bilan
+자주|Tez-tez
+보통|Odatda
+거의|Deyarli
+전혀|Umuman
+아직|Hali
+벌써|Allaqachon
+이미|Allaqachon (tugagan)
+다시|Yana / qayta
+매번|Har safar
+한동안|Bir muddat
+오랫동안|Uzoq vaqt
+곧바로|Darhol
+#time|🌦️|Ob-havo
+맑다|Ochiq / quyoshli
+흐리다|Bulutli
+비가 오다|Yomg'ir yog'moq
+눈이 오다|Qor yog'moq
+바람이 불다|Shamol esmoq
+덥다|Issiq (havo)
+춥다|Sovuq (havo)
+따뜻하다|Iliq
+시원하다|Salqin
+습하다|Nam
+건조하다|Quruq
+안개|Tuman
+태풍|Tayfun
+천둥|Momaqaldiroq
+번개|Chaqmoq
+소나기|Jala
+기온|Harorat
+영하|Noldan past
+영상|Noldan yuqori
+#num|🔢|Sof koreys raqamlar
+하나|1 · bir||Soat, yosh va narsalarni sanashda ishlatiladi.
+둘|2 · ikki
+셋|3 · uch
+넷|4 · to'rt
+다섯|5 · besh
+여섯|6 · olti
+일곱|7 · yetti
+여덟|8 · sakkiz
+아홉|9 · to'qqiz
+열|10 · o'n
+열하나|11 · o'n bir
+열둘|12 · o'n ikki
+스물|20 · yigirma
+서른|30 · o'ttiz
+마흔|40 · qirq
+쉰|50 · ellik
+예순|60 · oltmish
+일흔|70 · yetmish
+여든|80 · sakson
+아흔|90 · to'qson
+한|bir (sanoq so'zi oldida)||한 명 — bir kishi
+두|ikki (sanoq so'zi oldida)||두 개 — ikki dona
+세|uch (sanoq so'zi oldida)||세 명 — uch kishi
+네|to'rt (sanoq so'zi oldida)||네 권 — to'rt kitob
+스무|yigirma (sanoq so'zi oldida)||스무 살 — 20 yosh
+#num|💴|Xitoy-koreys raqamlar
+영 / 공|0 · nol||Telefon raqamida 0 ni 공 deb o'qiladi.
+일|1 · bir
+이|2 · ikki
+삼|3 · uch
+사|4 · to'rt
+오|5 · besh
+육|6 · olti
+칠|7 · yetti
+팔|8 · sakkiz
+구|9 · to'qqiz
+십|10 · o'n
+이십|20 · yigirma
+삼십|30 · o'ttiz
+사십|40 · qirq
+오십|50 · ellik
+백|100 · yuz
+천|1 000 · ming
+만|10 000 · o'n ming
+십만|100 000 · yuz ming
+백만|1 000 000 · million
+천만|10 000 000 · o'n million
+억|100 000 000 · yuz million
+#num|📦|Sanoq so'zlari
+개|Dona (umumiy sanoq)||사과 세 개 — 3 ta olma
+명|Kishi||학생 두 명 — 2 ta talaba
+권|Kitob, daftar||책 네 권 — 4 ta kitob
+장|Varaq, chipta||표 한 장 — 1 ta chipta
+병|Shisha||물 두 병 — 2 shisha suv
+잔|Piyola / stakan||커피 한 잔 — 1 chashka qahva
+컵|Stakan (cup)
+마리|Hayvon||고양이 한 마리 — 1 ta mushuk
+대|Mashina / texnika||차 한 대 — 1 ta mashina
+벌|Kiyim komplekti||옷 한 벌
+켤레|Juft oyoq kiyim||신발 한 켤레
+번|Marta / tartib raqami||두 번 — 2 marta
+층|Qavat||3층 — 3-qavat
+살|Yosh||스무 살 — 20 yosh
+원|Koreya voni||오천 원 — 5 000 von
+킬로그램|Kilogramm
+그램|Gramm
+리터|Litr
+미터|Metr
+킬로미터|Kilometr
+퍼센트|Foiz
+#num|🧭|Qaysi raqam qayerda?
+세 시|Soat — sof koreys raqam
+십 분|Daqiqa — xitoy-koreys raqam
+스무 살|Yosh — sof koreys raqam
+11월 23일|Sana — xitoy-koreys raqam
+오천 원|Pul — xitoy-koreys raqam
+공일공|Telefon raqami — xitoy-koreys (0 = 공)
+사과 두 개|Narsalar soni — sof koreys + sanoq so'zi
+#desc|🎨|Ranglar
+색 / 색깔|Rang
+빨간색|Qizil||빨간색 옷 — qizil kiyim
+파란색|Ko'k||파란색 가방 — ko'k sumka
+노란색|Sariq
+초록색|Yashil
+검은색|Qora||검은색 신발 — qora oyoq kiyim
+흰색|Oq
+회색|Kulrang
+분홍색|Pushti
+보라색|Binafsha
+주황색|To'q sariq
+갈색|Jigarrang
+하늘색|Havorang
+남색|To'q ko'k
+베이지색|Bej
+금색|Oltinrang
+은색|Kumushrang
+밝은색|Och / yorqin rang
+어두운색|To'q rang
+연한 색|Och tus
+진한 색|To'q / quyuq tus
+어떤 색을 좋아해요?|Qaysi rangni yoqtirasiz?
+#desc|⭐|Sifatlar
+좋다|Yaxshi||좋아요 — yaxshi
+나쁘다|Yomon
+크다|Katta||커요 — katta
+작다|Kichik||작아요 — kichik
+많다|Ko'p
+적다|Kam
+길다|Uzun
+짧다|Qisqa
+높다|Baland
+낮다|Past
+넓다|Keng
+좁다|Tor
+무겁다|Og'ir
+가볍다|Yengil
+빠르다|Tez||빨라요 — tez
+느리다|Sekin||느려요 — sekin
+쉽다|Oson
+어렵다|Qiyin||어려워요 — qiyin
+비싸다|Qimmat
+싸다|Arzon
+뜨겁다|Issiq (narsa)
+차갑다|Sovuq (narsa)
+덥다|Issiq (havo)||더워요 — issiq
+춥다|Sovuq (havo)||추워요 — sovuq
+따뜻하다|Iliq
+시원하다|Salqin
+예쁘다|Chiroyli||예뻐요 — chiroyli
+아름답다|Go'zal
+멋있다|Ko'rkam / zo'r
+귀엽다|Yoqimtoy
+잘생기다|Chiroyli ko'rinishga ega (odatda erkak)
+못생기다|Xunuk
+깨끗하다|Toza
+더럽다|Kir
+조용하다|Tinch
+시끄럽다|Shovqinli
+친절하다|Mehribon / xushmuomala
+불친절하다|Xushmuomala emas
+재미있다|Qiziqarli
+재미없다|Zerikarli
+맛있다|Mazali||맛있어요 — mazali
+맛없다|Bemaza
+배고프다|Qorni och
+배부르다|Qorni to'q
+피곤하다|Charchagan
+졸리다|Uyqusi kelgan
+아프다|Og'riyapti / kasal
+건강하다|Sog'lom
+행복하다|Baxtli
+슬프다|Xafa
+기쁘다|Xursand
+화나다|Jahli chiqqan
+무섭다|Qo'rqinchli
+걱정스럽다|Xavotirli
+중요하다|Muhim
+필요하다|Kerakli
+가능하다|Mumkin
+불가능하다|Mumkin emas
+안전하다|Xavfsiz
+위험하다|Xavfli
+편하다|Qulay
+불편하다|Noqulay
+똑똑하다|Aqlli
+부지런하다|Mehnatsevar
+게으르다|Dangasa
+친하다|Yaqin / qadrdon
+비슷하다|O'xshash
+다르다|Boshqacha
+같다|Bir xil
+특별하다|Maxsus
+완벽하다|Mukammal
+이상하다|G'alati
+신기하다|Hayratlanarli
+솔직하다|Rostgo'y
+부드럽다|Yumshoq
+딱딱하다|Qattiq
+달다|Shirin
+짜다|Sho'r
+맵다|Achchiq (o'tkir)
+시다|Nordon
+쓰다|Achchiq (taxir)||Fe'l sifatida 쓰다 — yozmoq. Ma'noni kontekst belgilaydi.
+싱겁다|Tuzsiz / ta'mi sust
+고소하다|Yong'oqsimon, yoqimli ta'mli
+#desc|↔️|Qarama-qarshi juftliklar
+크다 ↔ 작다|Katta ↔ Kichik
+많다 ↔ 적다|Ko'p ↔ Kam
+길다 ↔ 짧다|Uzun ↔ Qisqa
+높다 ↔ 낮다|Baland ↔ Past
+넓다 ↔ 좁다|Keng ↔ Tor
+빠르다 ↔ 느리다|Tez ↔ Sekin
+쉽다 ↔ 어렵다|Oson ↔ Qiyin
+비싸다 ↔ 싸다|Qimmat ↔ Arzon
+덥다 ↔ 춥다|Issiq (havo) ↔ Sovuq (havo)
+뜨겁다 ↔ 차갑다|Issiq (narsa) ↔ Sovuq (narsa)
+밝다 ↔ 어둡다|Yorug' ↔ Qorong'i
+깨끗하다 ↔ 더럽다|Toza ↔ Kir
+조용하다 ↔ 시끄럽다|Tinch ↔ Shovqinli
+친절하다 ↔ 불친절하다|Mehribon ↔ Xushmuomala emas
+좋다 ↔ 나쁘다|Yaxshi ↔ Yomon
+재미있다 ↔ 재미없다|Qiziqarli ↔ Zerikarli
+맛있다 ↔ 맛없다|Mazali ↔ Bemaza
+편하다 ↔ 불편하다|Qulay ↔ Noqulay
+안전하다 ↔ 위험하다|Xavfsiz ↔ Xavfli
+같다 ↔ 다르다|Bir xil ↔ Boshqacha
+#desc|🔷|Shakllar
+모양|Shakl
+동그라미|Doira
+원|Aylana
+네모|To'rtburchak
+세모|Uchburchak
+사각형|To'rtburchak
+삼각형|Uchburchak
+직사각형|To'g'ri to'rtburchak
+정사각형|Kvadrat
+타원|Oval
+별 모양|Yulduz shakli
+하트 모양|Yurak shakli
+마름모|Romb
+선|Chiziq
+직선|To'g'ri chiziq
+곡선|Egri chiziq
+점|Nuqta
+입체|Uch o'lchamli shakl
+구|Shar
+정육면체|Kub
+원기둥|Silindr
+원뿔|Konus
+#desc|⚡|Ravishlar
+아주|Juda
+매우|Juda
+정말|Haqiqatan
+진짜|Rostdan ham
+너무|Juda / haddan tashqari
+조금|Biroz
+약간|Sal
+많이|Ko'p
+적게|Kam
+잘|Yaxshi / mohirlik bilan
+못|Eplay olmaslik
+빨리|Tez
+천천히|Sekin||천천히 말해 주세요. — Iltimos, sekinroq gapiring.
+조용히|Jim / tinchgina
+열심히|Astoydil
+쉽게|Osonlik bilan
+어렵게|Qiyinchilik bilan
+함께|Birgalikda
+혼자|Yolg'iz
+같이|Birga
+따로|Alohida
+직접|Shaxsan / bevosita
+특히|Ayniqsa
+보통|Odatda
+대체로|Umuman olganda
+아마|Ehtimol
+아마도|Balki
+꼭|Albatta / shart
+반드시|Albatta / majburiy ravishda
+물론|Albatta
+거의|Deyarli
+전혀|Umuman
+별로|Unchalik
+충분히|Yetarlicha
+갑자기|To'satdan
+계속|Davomli ravishda
+이미|Allaqachon
+아직|Hali
+벌써|Allaqachon
+다시|Qayta
+먼저|Avval
+나중에|Keyin
+바로|Darhol
+자주|Tez-tez
+가끔|Ba'zan
+항상|Har doim
+매일|Har kuni
+특별히|Ayniqsa
+#act|🏃|Fe'llar
+하다|Qilmoq
+가다|Bormoq
+오다|Kelmoq
+먹다|Yemoq
+마시다|Ichmoq
+자다|Uxlamoq
+일어나다|Turmoq / uyg'onmoq
+씻다|Yuvinmoq
+입다|Kiyinmoq
+벗다|Yechmoq
+보다|Ko'rmoq
+듣다|Eshitmoq / tinglamoq
+말하다|Gapirmoq
+이야기하다|Suhbatlashmoq
+읽다|O'qimoq
+쓰다|Yozmoq
+배우다|O'rganmoq
+공부하다|Dars qilmoq
+가르치다|O'rgatmoq
+일하다|Ishlamoq
+쉬다|Dam olmoq
+운동하다|Sport bilan shug'ullanmoq
+걷다|Yurmoq
+뛰다|Yugurmoq
+앉다|O'tirmoq
+서다|Tik turmoq
+기다리다|Kutmoq
+만나다|Uchrashmoq
+헤어지다|Xayrlashmoq / ajralmoq
+좋아하다|Yoqtirmoq
+사랑하다|Sevmoq
+싫어하다|Yomon ko'rmoq
+생각하다|O'ylamoq
+알다|Bilmoq
+모르다|Bilmaslik
+이해하다|Tushunmoq
+기억하다|Eslamoq
+잊어버리다|Unutmoq
+원하다|Xohlamoq
+필요하다|Kerak bo'lmoq
+만들다|Yasamoq / yaratmoq
+사다|Sotib olmoq
+팔다|Sotmoq
+주다|Bermoq
+받다|Olmoq / qabul qilmoq
+보내다|Yubormoq
+열다|Ochmoq
+닫다|Yopmoq
+시작하다|Boshlamoq
+끝나다|Tugamoq
+끝내다|Tugatmoq
+사용하다|Foydalanmoq
+찾다|Qidirmoq / topmoq
+잃어버리다|Yo'qotib qo'ymoq
+도와주다|Yordam bermoq
+물어보다|So'ramoq
+대답하다|Javob bermoq
+주문하다|Buyurtma bermoq
+요리하다|Ovqat pishirmoq
+청소하다|Tozalamoq
+준비하다|Tayyorlamoq
+예약하다|Band qilmoq
+전화하다|Telefon qilmoq
+연락하다|Aloqaga chiqmoq
+신청하다|Ariza bermoq
+선택하다|Tanlamoq
+결정하다|Qaror qilmoq
+설명하다|Tushuntirmoq
+비교하다|Taqqoslamoq
+연습하다|Mashq qilmoq
+운전하다|Mashina haydamoq
+타다|Transportga minmoq
+내리다|Tushmoq
+갈아타다|Transport almashtirmoq
+도착하다|Yetib kelmoq
+출발하다|Jo'nab ketmoq
+살다|Yashamoq
+죽다|O'lmoq
+웃다|Kulmoq
+울다|Yig'lamoq
+입학하다|O'qishga kirmoq
+졸업하다|Bitirmoq
+이사하다|Ko'chmoq
+출근하다|Ishga bormoq
+퇴근하다|Ishdan qaytmoq
+#act|🔗|Fe'l birikmalari
+밥을 먹다|Ovqat yemoq
+물을 마시다|Suv ichmoq
+책을 읽다|Kitob o'qimoq
+한국어를 배우다|Koreys tilini o'rganmoq
+숙제를 하다|Uy vazifasini qilmoq
+친구를 만나다|Do'st bilan uchrashmoq
+버스를 타다|Avtobusga minmoq
+버스에서 내리다|Avtobusdan tushmoq
+문을 열다|Eshikni ochmoq
+방을 청소하다|Xonani tozalamoq
+사진을 찍다|Suratga olmoq
+전화를 하다|Telefon qilmoq
+#act|🚌|Transport va yo'nalish
+버스|Avtobus
+지하철|Metro
+택시|Taksi
+기차|Poyezd
+비행기|Samolyot
+자전거|Velosiped
+자동차|Avtomobil
+오토바이|Mototsikl
+정류장|Bekat
+역|Vokzal / metro bekati
+공항|Aeroport
+출구|Chiqish
+입구|Kirish
+길|Yo'l
+거리|Masofa / ko'cha
+신호등|Svetofor
+횡단보도|Piyodalar o'tish joyi
+직진|To'g'riga
+좌회전|Chapga burilish
+우회전|O'ngga burilish
+유턴|Qayrilib olish
+가까이|Yaqin
+멀리|Uzoq
+오른쪽으로|O'ng tomonga
+왼쪽으로|Chap tomonga
+똑바로|To'g'riga
+#gram|📍|Joylashuv so'zlari
+위|Ustida / yuqorida||책이 책상 위에 있어요. — Kitob stol ustida.
+아래|Ostida / pastda
+밑|Tagida
+앞|Oldida
+뒤|Orqasida
+옆|Yonida
+오른쪽|O'ng tomonda
+왼쪽|Chap tomonda
+안|Ichida
+밖|Tashqarisida
+속|Ichkarisida
+사이|O'rtasida
+가운데|Markazida
+근처|Yaqinida
+맞은편|Qarama-qarshisida
+건너편|Narigi tomonida
+주변|Atrofida
+북쪽|Shimolda
+남쪽|Janubda
+동쪽|Sharqda
+서쪽|G'arbda
+#gram|🧱|Qo'shimchalar (조사)
+은/는|Mavzu||저는 학생이에요. — Men talabaman.
+이/가|Ega||비가 와요. — Yomg'ir yog'yapti.
+을/를|To'ldiruvchi||밥을 먹어요. — Ovqat yeyman.
+에|Joy, vaqt, yo'nalish||학교에 가요. — Universitetga boraman.
+에서|Harakat sodir bo'ladigan joy||학교에서 공부해요. — Universitetda o'qiyman.
+에게|Kimga||친구에게 줘요. — Do'stimga beraman.
+한테|Kimga (og'zaki)||친구한테 줘요. — Do'stimga beraman.
+께|Kimga (hurmat)||선생님께 드려요. — O'qituvchiga beraman.
+에게서|Kimdan||친구에게서 받아요. — Do'stimdan olaman.
+한테서|Kimdan (og'zaki)||친구한테서 받아요. — Do'stimdan olaman.
+부터|…dan boshlab||아침부터 — ertalabdan boshlab
+까지|…gacha||집까지 — uyga qadar
+와/과|Va / bilan||친구와 — do'st bilan
+하고|Va / bilan||친구하고 — do'st bilan
+(이)랑|Va / bilan (og'zaki)||친구랑 — do'st bilan
+도|Ham||저도 — men ham
+만|Faqat||나만 — faqat men
+의|Egalik||친구의 책 — do'stning kitobi
+로/으로|Vosita / yo'nalish||버스로 가요. — Avtobusda boraman.
+보다|…dan ko'ra||나보다 커요. — Mendan kattaroq.
+처럼|Kabi||아이처럼 — boladek
+밖에|Faqat (odatda inkor bilan)||하나밖에 없어요. — Faqat bittasi bor.
+#gram|❓|Savol so'zlari
+누구|Kim||누구예요?
+무엇 / 뭐|Nima||뭐 해요?
+어디|Qayer||어디예요?
+언제|Qachon||언제 가요?
+왜|Nima uchun||왜 와요?
+어떻게|Qanday||어떻게 가요?
+어느|Qaysi||어느 거예요?
+어떤|Qanday / qanaqa
+몇|Nechta / nechanchi||몇 명이에요?
+얼마|Qancha (narx / miqdor)||얼마예요?
+몇 시|Soat nechchi||지금 몇 시예요?
+무슨|Qanday / qaysi turdagi||무슨 음식이에요?
+누구의|Kimning
+어디서|Qayerda / qayerdan
+어디에|Qayerga / qayerda
+#gram|🔀|Bog'lovchilar
+그리고|Va / keyin
+그러나|Biroq
+하지만|Lekin
+그래서|Shuning uchun
+그러면|Unday bo'lsa
+그러니까|Demak / shuning uchun
+그런데|Lekin / aytgancha
+또는|Yoki
+아니면|Yoki bo'lmasa
+왜냐하면|Chunki
+또한|Shuningdek
+게다가|Bundan tashqari
+먼저|Avvalo
+마지막으로|Oxirida
+예를 들어|Masalan
+즉|Ya'ni
+반면에|Aksincha / boshqa tomondan
+따라서|Shuning uchun
+결국|Oxir-oqibat
+#life|👥|Odamlar va munosabatlar
+사람|Odam
+친구|Do'st
+가족|Oila
+부모님|Ota-ona
+아버지|Ota
+어머니|Ona
+형|Aka (erkak kishi aytadi)
+오빠|Aka (ayol kishi aytadi)
+누나|Opa (erkak kishi aytadi)
+언니|Opa (ayol kishi aytadi)
+동생|Uka / singil
+남동생|Uka
+여동생|Singil
+선생님|O'qituvchi
+학생|O'quvchi / talaba
+교수님|Professor
+직원|Xodim
+사장님|Rahbar / xo'jayin
+손님|Mehmon / mijoz
+이웃|Qo'shni
+동료|Hamkasb
+선배|Katta kursdagi talaba / tajribaliroq kishi
+후배|Kichik kursdagi talaba
+남자|Erkak
+여자|Ayol
+아이|Bola
+어른|Katta yoshli
+외국인|Chet ellik
+한국인|Koreys
+유학생|Xalqaro talaba
+#life|🍚|Ovqat va ta'm
+음식|Ovqat
+밥|Pishgan guruch / ovqat
+아침 식사|Nonushta
+점심 식사|Tushlik
+저녁 식사|Kechki ovqat
+고기|Go'sht
+소고기|Mol go'shti
+돼지고기|Cho'chqa go'shti
+닭고기|Tovuq go'shti
+생선|Baliq
+계란|Tuxum
+채소|Sabzavot
+과일|Meva
+빵|Non
+국|Sho'rva
+라면|Ramyon
+김치|Kimchi
+물|Suv
+우유|Sut
+커피|Qahva
+차|Choy
+주스|Sharbat
+디저트|Desert
+달콤하다|Shirin
+짭짤하다|Sho'rroq
+맵다|Achchiq
+시다|Nordon
+고소하다|Yong'oqsimon, yoqimli ta'mli
+신선하다|Yangi / barra
+바삭하다|Qarsildoq
+부드럽다|Yumshoq
+기름지다|Yog'li
+담백하다|Yengil, yog'i kam ta'mli
+#life|🏠|Uy va buyumlar
+집|Uy
+방|Xona
+거실|Mehmonxona
+부엌|Oshxona
+화장실|Hojatxona
+욕실|Hammom
+침대|Karavot
+책상|Yozuv stoli
+의자|Stul
+소파|Divan
+냉장고|Muzlatkich
+세탁기|Kir yuvish mashinasi
+에어컨|Konditsioner
+문|Eshik
+창문|Deraza
+열쇠|Kalit
+가방|Sumka
+휴대폰|Telefon
+컴퓨터|Kompyuter
+노트북|Noutbuk
+책|Kitob
+공책|Daftar
+펜|Ruchka
+옷|Kiyim
+신발|Oyoq kiyim
+우산|Soyabon
+수건|Sochiq
+거울|Ko'zgu
+#life|🗣️|Kundalik iboralar
+안녕하세요|Salom
+안녕히 가세요|Xayr (ketayotgan odamga)
+안녕히 계세요|Xayr (qolayotgan odamga)
+감사합니다|Rahmat
+고마워요|Rahmat
+죄송합니다|Kechirasiz
+괜찮아요|Hammasi joyida / mayli
+잠깐만요|Bir daqiqa
+잠시만 기다려 주세요|Biroz kutib turing, iltimos
+잘 모르겠어요|Yaxshi bilmayman
+이해했어요|Tushundim
+이해가 안 돼요|Tushunmayapman
+다시 말해 주세요|Qayta ayting, iltimos
+천천히 말해 주세요|Sekinroq gapiring, iltimos
+한국어를 배우고 있어요|Koreys tilini o'rganyapman
+한국어를 잘 못해요|Koreys tilida yaxshi gapira olmayman
+얼마예요?|Qancha turadi?
+어디예요?|Qayerda?
+화장실이 어디예요?|Hojatxona qayerda?
+도와주세요|Yordam bering, iltimos
+괜찮으세요?|Yaxshimisiz?
+맛있어요|Mazali
+좋아요|Yaxshi / yoqadi
+정말요?|Rostdanmi?
+맞아요|To'g'ri
+아니에요|Yo'q / unday emas
+알겠어요|Tushundim
+잘 부탁드립니다|Sizdan yaxshi hamkorlik / yordam kutaman
+#life|💬|Tayyor gaplar
+오늘은 날씨가 좋아요.|Bugun ob-havo yaxshi.
+저는 매일 한국어를 공부해요.|Men har kuni koreys tilini o'rganaman.
+내일 친구를 만나요.|Ertaga do'stim bilan uchrashaman.
+이 음식은 정말 맛있어요.|Bu ovqat juda mazali.
+제 방은 조금 작아요.|Mening xonam biroz kichkina.
+학교는 집에서 가까워요.|Universitet uydan yaqin.
+저는 커피보다 차를 더 좋아해요.|Men qahvadan ko'ra choyni ko'proq yoqtiraman.
+주말에는 보통 쉬어요.|Dam olish kunlari odatda dam olaman.
+지금 몇 시예요?|Hozir soat nechchi?
+천천히 말해 주세요.|Iltimos, sekinroq gapiring.
+`;
+
+/* ---------- parse ---------- */
+const cats=[],all=[],catById={},byKey={};
+(function(){
+  let cur=null;
+  DATA.split('\n').forEach(function(l){
+    l=l.trim(); if(!l) return;
+    if(l[0]==='#'){
+      const p=l.slice(1).split('|');
+      cur={id:'c'+cats.length,g:p[0],e:p[1],n:p[2],items:[]};
+      cats.push(cur); catById[cur.id]=cur;
+    }else{
+      const p=l.split('|');
+      const it={k:p[0],u:p[1],x:p[3]||'',g:cur.g,c:cur.n,cid:cur.id,key:cur.id+'/'+p[0]};
+      cur.items.push(it); all.push(it); byKey[it.key]=it;
+    }
+  });
+})();
+
+/* ---------- my words (JSON import, saved on this device) ---------- */
+let extra=[];
+try{extra=JSON.parse(localStorage.getItem('kvw-custom')||'[]')||[]}catch(e){extra=[]}
+function saveCustom(){try{localStorage.setItem('kvw-custom',JSON.stringify(extra))}catch(e){}}
+function mergeCustom(){
+  if(!extra.length) return;
+  let c=catById['custom'];
+  if(!c){c={id:'custom',g:'life',e:'⭐',n:"Mening so'zlarim",items:[]};cats.push(c);catById['custom']=c}
+  for(const it of extra){
+    if(byKey[it.key]) continue;
+    c.items.push(it);all.push(it);byKey[it.key]=it;
+  }
+}
+mergeCustom();
+
+/* ---------- state ---------- */
+let known={};
+try{known=JSON.parse(localStorage.getItem('kvw-known')||'{}')||{}}catch(e){known={}}
+function save(){try{localStorage.setItem('kvw-known',JSON.stringify(known))}catch(e){}}
+const state={view:'list',cat:'all',q:'',hideUz:false,onlyUnknown:false,shuffle:false,dir:'kr',auto:true};
+try{if(localStorage.getItem('kvw-auto')==='0') state.auto=false}catch(e){}
+let fc={deck:[],i:0,flip:false};
+let qz=null,timer=null;
+
+const $=function(s){return document.querySelector(s)};
+const esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ---------- sound ---------- */
+let koVoice=null;
+function pickVoice(){
+  try{
+    koVoice=null;
+    const vs=window.speechSynthesis.getVoices();
+    for(let i=0;i<vs.length;i++){if(/^ko/i.test(vs[i].lang)){koVoice=vs[i];break}}
+  }catch(e){}
+}
+try{if(window.speechSynthesis){pickVoice();window.speechSynthesis.onvoiceschanged=pickVoice}}catch(e){}
+function speak(t){
+  try{
+    const s=window.speechSynthesis; if(!s) return;
+    s.cancel();
+    const u=new SpeechSynthesisUtterance(t.replace(/\(.*?\)/g,'').replace(/[↔\/]/g,' '));
+    u.lang='ko-KR';u.rate=.85;
+    if(koVoice) u.voice=koVoice;
+    s.speak(u);
+  }catch(e){}
+}
+function autoSpeak(t){if(state.auto) speak(t)}
+function soundBtn(){
+  return '<button class="chip sm" data-act="sound" aria-pressed="'+state.auto+'">'+(state.auto?'🔊 Avto':'🔈 Qo\'lda')+'</button>';
+}
+
+function scopeItems(){return state.cat==='all'?all:catById[state.cat].items}
+function knownCount(items){let n=0;for(const it of items) if(known[it.key]) n++;return n}
+
+/* ---------- nav + progress ---------- */
+function renderNav(){
+  let h='<button class="nv all" data-act="cat" data-c="all" aria-current="'+(state.cat==='all')+'"><span class="nn">Barcha so\'zlar</span><span class="nc">'+knownCount(all)+'/'+all.length+'</span></button>';
+  for(const g in GROUPS){
+    const list=cats.filter(function(c){return c.g===g});
+    h+='<div class="grp" data-g="'+g+'"><div class="grp-h"><i></i>'+GROUPS[g]+'</div>';
+    for(const c of list){
+      h+='<button class="nv" data-g="'+g+'" data-act="cat" data-c="'+c.id+'" aria-current="'+(state.cat===c.id)+'"><span class="dot"></span><span class="nn">'+c.e+' '+esc(c.n)+'</span><span class="nc">'+knownCount(c.items)+'/'+c.items.length+'</span></button>';
+    }
+    h+='</div>';
+  }
+  const nv=$('#nav'),sl=nv.scrollLeft,st=nv.scrollTop;
+  nv.innerHTML=h;nv.scrollLeft=sl;nv.scrollTop=st;
+}
+function renderProgress(){
+  const k=knownCount(all),t=all.length,p=t?Math.round(k*100/t):0;
+  $('#pk').textContent=k;$('#pt').textContent=t;$('#pp').textContent=p+'%';$('#pb').style.width=p+'%';
+}
+function renderScope(){
+  const items=scopeItems();
+  const name=state.cat==='all'?'Barcha so\'zlar':catById[state.cat].n;
+  $('#scope').innerHTML='<b>'+esc(name)+'</b> · '+knownCount(items)+'/'+items.length+' yodlangan';
+}
+
+/* ---------- list ---------- */
+function card(it){
+  const k=!!known[it.key];
+  return '<article class="w'+(k?' is-known':'')+'" data-key="'+esc(it.key)+'"><span class="kr" lang="ko">'+esc(it.k)+'</span><span class="uz">'+esc(it.u)+'</span><span class="tools"><button class="ib" data-act="say" aria-label="Eshitish">🔊</button><button class="ib chk" data-act="know" aria-pressed="'+k+'" aria-label="Yodladim deb belgilash">✓</button></span>'
+    +(it.x?'<div class="ex">'+esc(it.x)+'</div>':'')+'</article>';
+}
+function viewList(){
+  const q=state.q.trim().toLowerCase();
+  const list=state.cat==='all'?cats:[catById[state.cat]];
+  let h='',total=0;
+  for(const c of list){
+    const items=c.items.filter(function(it){
+      if(state.onlyUnknown&&known[it.key]) return false;
+      if(!q) return true;
+      return (it.k+' '+it.u+' '+it.x).toLowerCase().indexOf(q)>-1;
+    });
+    if(!items.length) continue;
+    total+=items.length;
+    h+='<section class="cat" data-g="'+c.g+'"><h2><span class="pill">'+c.e+' '+esc(c.n)+'</span><span class="cnt">'+items.length+' ta</span></h2><div class="grid">'+items.map(card).join('')+'</div></section>';
+  }
+  if(!total) h='<div class="empty">Hech narsa topilmadi.</div>';
+  return '<div class="'+(state.hideUz?'hide-uz':'')+'" id="listwrap">'+h+'</div>';
+}
+
+/* ---------- flashcards ---------- */
+function buildDeck(){
+  let d=scopeItems().filter(function(it){return !(state.onlyUnknown&&known[it.key])});
+  d=d.slice(); if(state.shuffle) shuffle(d);
+  fc={deck:d,i:0,flip:false};
+}
+function cardSpeak(){
+  const it=fc.deck[fc.i]; if(!it||state.view!=='cards') return;
+  if((state.dir==='kr'&&!fc.flip)||(state.dir==='uz'&&fc.flip)) autoSpeak(it.k);
+}
+function fcGo(i){fc.i=Math.max(0,Math.min(fc.deck.length,i));fc.flip=false;renderView();cardSpeak()}
+function viewCards(){
+  if(!fc.deck.length) return '<div class="empty">Bu bo\'limda so\'z yo\'q.</div>';
+  if(fc.i>=fc.deck.length){
+    return '<div class="fc-wrap"><div class="fc-card" style="background:var(--surface);color:var(--fg)"><div class="score">'+fc.deck.length+'/'+fc.deck.length+'</div></div><div class="fc-btns"><button class="btn pri" data-act="restart">Qaytadan</button></div></div>';
+  }
+  const it=fc.deck[fc.i],kr=state.dir==='kr';
+  const krBig='<div class="fc-big" lang="ko">'+esc(it.k)+'</div>';
+  const uzBig='<div class="fc-big uz-big">'+esc(it.u)+'</div>';
+  let content;
+  if(!fc.flip) content=kr?krBig:uzBig;
+  else content=(kr?uzBig:krBig)+(it.x?'<div class="ex">'+esc(it.x)+'</div>':'');
+  return '<div class="fc-wrap" data-g="'+it.g+'">'
+    +'<div class="hud"><span><b>'+(fc.i+1)+'</b> / '+fc.deck.length+'</span>'+soundBtn()+'</div>'
+    +'<button class="fc-card" data-act="flip" aria-label="Kartani aylantirish">'+content+'</button>'
+    +'<div class="fc-btns three"><button class="btn" data-act="prev" aria-label="Oldingi">←</button><button class="btn" data-act="say" aria-label="Eshitish">🔊</button><button class="btn" data-act="next" aria-label="Keyingi">→</button></div>'
+    +'<div class="fc-btns"><button class="btn bad" data-act="again">Yana takror</button><button class="btn ok" data-act="gotit">Yodladim ✓</button></div>'
+    +'</div>';
+}
+
+/* ---------- quiz + listening ---------- */
+function mkQ(it,dir){
+  const f=dir==='kr'?'u':'k';
+  const ans=it[f];
+  const seen=new Set([ans]),opts=[];
+  const pools=[shuffle(scopeItems().slice()),shuffle(all.slice())];
+  for(let p=0;p<pools.length;p++){
+    for(const x of pools[p]){
+      if(opts.length>=3) break;
+      if(!seen.has(x[f])){seen.add(x[f]);opts.push(x[f])}
+    }
+  }
+  return {it:it,dir:dir,ans:ans,opts:shuffle([ans].concat(opts))};
+}
+function startQuiz(){
+  clearTimeout(timer);
+  const dir=state.view==='listen'?'kr':state.dir;
+  const pool=shuffle(scopeItems().slice()).slice(0,10);
+  qz={mode:state.view,qs:pool.map(function(it){return mkQ(it,dir)}),i:0,score:0,picked:null,wrong:[]};
+}
+function qSpeak(){
+  if(!qz||qz.i>=qz.qs.length) return;
+  const q=qz.qs[qz.i];
+  if(qz.mode==='listen'||q.dir==='kr') autoSpeak(q.it.k);
+}
+function viewQuiz(){
+  const listen=state.view==='listen';
+  if(listen&&!window.speechSynthesis) return '<div class="empty">Bu qurilmada ovoz funksiyasi yo\'q.</div>';
+  if(!qz||!qz.qs.length) return '<div class="empty">So\'z topilmadi.</div>';
+  if(qz.i>=qz.qs.length){
+    const pct=Math.round(qz.score*100/qz.qs.length);
+    let h='<div class="qz"><div class="qz-q" style="background:var(--surface);color:var(--fg)"><div class="score">'+qz.score+' / '+qz.qs.length+'</div><div>'+pct+'%</div>';
+    if(qz.wrong.length){
+      h+='<ul class="wrong-list">'+qz.wrong.slice(0,4).map(function(w){return '<li><span class="kr" lang="ko">'+esc(w.k)+'</span><span>'+esc(w.u)+'</span></li>'}).join('')+'</ul>';
+      if(qz.wrong.length>4) h+='<div>+'+(qz.wrong.length-4)+'</div>';
+    }
+    return h+'</div><div class="fc-btns"><button class="btn pri" data-act="retry">Yangi o\'yin</button></div></div>';
+  }
+  const q=qz.qs[qz.i],it=q.it,done=qz.picked!==null;
+  let prompt;
+  if(listen){
+    prompt='<button class="spk" data-act="replay" aria-label="Eshitish"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>'
+      +(done?'<div class="fc-big small" lang="ko">'+esc(it.k)+'</div>':'');
+  }else if(q.dir==='kr'){
+    prompt='<div class="fc-big" lang="ko">'+esc(it.k)+'</div><button class="ib" data-act="replay" aria-label="Eshitish">🔊</button>';
+  }else{
+    prompt='<div class="fc-big uz-big">'+esc(it.u)+'</div>';
+  }
+  const opts=q.opts.map(function(o,idx){
+    let cls='opt'+(q.dir==='uz'?' kro':''),dis='';
+    if(done){
+      dis=' disabled';
+      if(o===q.ans) cls+=' right'; else if(idx===qz.picked) cls+=' wrong';
+    }
+    return '<button class="'+cls+'" data-act="pick" data-i="'+idx+'"'+dis+'>'+esc(o)+'</button>';
+  }).join('');
+  return '<div class="qz" data-g="'+it.g+'"><div class="hud"><span><b>'+(qz.i+1)+'</b> / '+qz.qs.length+' · ✓ '+qz.score+'</span>'+soundBtn()+'</div><div class="qz-q">'+prompt+'</div><div class="qz-opts">'+opts+'</div></div>';
+}
+
+/* ---------- render ---------- */
+function renderView(){
+  const v=$('#view');
+  v.innerHTML=state.view==='list'?viewList():state.view==='cards'?viewCards():viewQuiz();
+}
+function refresh(){
+  clearTimeout(timer);
+  const fit=state.view!=='list';
+  document.documentElement.classList.toggle('fit',fit);
+  $('#main').setAttribute('data-view',state.view);
+  document.querySelectorAll('.tab').forEach(function(t){t.setAttribute('aria-selected',String(t.dataset.v===state.view))});
+  document.querySelectorAll('[data-for]').forEach(function(el){el.hidden=el.dataset.for.split(' ').indexOf(state.view)<0});
+  const ctl=$('.ctl');
+  ctl.hidden=!Array.prototype.some.call(ctl.children,function(el){return !el.hidden});
+  if(state.view==='cards') buildDeck();
+  if(state.view==='quiz'||state.view==='listen') startQuiz();
+  renderNav();renderProgress();renderScope();renderView();
+  if(state.view==='cards') cardSpeak();
+  if(state.view==='quiz'||state.view==='listen') qSpeak();
+}
+function afterKnow(){renderNav();renderProgress();renderScope();save()}
+
+/* ---------- JSON word list: download / upload ---------- */
+function ioMsg(t){const m=$('#ioMsg');if(!m) return;m.textContent=t;clearTimeout(m._t);m._t=setTimeout(function(){m.textContent=''},5000)}
+function downloadJson(){
+  const words=all.map(function(it){return {korean:it.k,uzbek:it.u,example:it.x||'',group:it.g,category:it.c}});
+  const data={app:'korean-vocabulary-world',version:1,exportedAt:new Date().toISOString(),words:words,known:Object.keys(known)};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='korean-vocabulary-world.json';a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+  ioMsg('Saqlab olindi: '+words.length+' ta so\'z');
+}
+function importJson(file){
+  if(!file) return;
+  const r=new FileReader();
+  r.onload=function(){
+    let d,added=0,skipped=0;
+    try{d=JSON.parse(r.result)}catch(e){ioMsg('Xato: fayl JSON emas');return}
+    const list=Array.isArray(d)?d:(d&&Array.isArray(d.words)?d.words:null);
+    if(!list){ioMsg('Xato: so\'zlar ro\'yxati topilmadi');return}
+    for(const w of list){
+      const k=String(w.korean||w.k||'').trim(),u=String(w.uzbek||w.u||'').trim();
+      if(!k||!u){skipped++;continue}
+      const key='custom/'+k;
+      if(byKey[key]){skipped++;continue}
+      extra.push({k:k,u:u,x:String(w.example||w.x||''),g:'life',c:"Mening so'zlarim",cid:'custom',key:key});
+      added++;
+    }
+    if(d&&Array.isArray(d.known)) for(const kk of d.known) known[kk]=1;
+    saveCustom();save();mergeCustom();refresh();
+    ioMsg('Yuklandi: '+added+' ta yangi so\'z'+(skipped?' · o\'tkazib yuborildi: '+skipped:''));
+  };
+  r.readAsText(file);
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  const b=e.target.closest('[data-act]');
+  if(!b){
+    const w=e.target.closest('.hide-uz .w');
+    if(w) w.classList.toggle('show');
+    return;
+  }
+  const a=b.dataset.act;
+  if(a==='view'){state.view=b.dataset.v;refresh();window.scrollTo({top:0,behavior:'smooth'});return}
+  if(a==='cat'){
+    state.cat=b.dataset.c;refresh();
+    if(window.innerWidth<=820){
+      window.scrollTo({top:0});
+      const cur=$('#nav [aria-current="true"]');
+      if(cur&&cur.scrollIntoView) cur.scrollIntoView({inline:'center',block:'nearest'});
+    }
+    return;
+  }
+  if(a==='sound'){
+    state.auto=!state.auto;
+    try{localStorage.setItem('kvw-auto',state.auto?'1':'0')}catch(err){}
+    if(!state.auto){try{window.speechSynthesis.cancel()}catch(err){}}
+    renderView();return;
+  }
+  if(a==='say'){
+    const w=b.closest('.w');
+    if(w) speak(byKey[w.dataset.key].k); else if(fc.deck[fc.i]) speak(fc.deck[fc.i].k);
+    return;
+  }
+  if(a==='replay'){if(qz&&qz.qs[qz.i]) speak(qz.qs[qz.i].it.k);return}
+  if(a==='know'){
+    const w=b.closest('.w'),it=byKey[w.dataset.key];
+    if(known[it.key]) delete known[it.key]; else known[it.key]=1;
+    if(state.onlyUnknown){afterKnow();renderView()}
+    else{
+      const k=!!known[it.key];
+      w.classList.toggle('is-known',k);b.setAttribute('aria-pressed',String(k));afterKnow();
+    }
+    return;
+  }
+  if(a==='flip'){fc.flip=!fc.flip;renderView();cardSpeak();return}
+  if(a==='next'){fcGo(fc.i+1);return}
+  if(a==='prev'){fcGo(fc.i-1);return}
+  if(a==='gotit'||a==='again'){
+    const it=fc.deck[fc.i];
+    if(it){if(a==='gotit') known[it.key]=1; else delete known[it.key]}
+    afterKnow();fcGo(fc.i+1);return;
+  }
+  if(a==='restart'){buildDeck();renderView();cardSpeak();return}
+  if(a==='pick'){
+    if(qz.picked!==null) return;
+    const q=qz.qs[qz.i];qz.picked=+b.dataset.i;
+    const ok=q.opts[qz.picked]===q.ans;
+    if(ok) qz.score++; else qz.wrong.push(q.it);
+    if(qz.mode==='quiz'&&q.dir==='uz') autoSpeak(q.it.k);
+    renderView();
+    timer=setTimeout(function(){qz.i++;qz.picked=null;renderView();qSpeak()},ok?900:1700);
+    return;
+  }
+  if(a==='retry'){startQuiz();renderView();qSpeak();return}
+});
+$('#q').addEventListener('input',function(e){state.q=e.target.value;renderView()});
+$('#hideUz').addEventListener('change',function(e){state.hideUz=e.target.checked;renderView()});
+$('#onlyUnknown').addEventListener('change',function(e){state.onlyUnknown=e.target.checked;refresh()});
+$('#shuffle').addEventListener('change',function(e){state.shuffle=e.target.checked;refresh()});
+$('#dir').addEventListener('change',function(e){state.dir=e.target.value;refresh()});
+$('#expJson').addEventListener('click',downloadJson);
+$('#impJson').addEventListener('click',function(){$('#impFile').click()});
+$('#impFile').addEventListener('change',function(e){importJson(e.target.files[0]);e.target.value=''});
+document.addEventListener('keydown',function(e){
+  if(state.view!=='cards'||e.target.matches('input,select')) return;
+  if(e.key==='ArrowRight') fcGo(fc.i+1);
+  else if(e.key==='ArrowLeft') fcGo(fc.i-1);
+});
+
+/* ---------- light / dark ---------- */
+(function(){
+  const root=document.documentElement,btn=$('#theme');
+  const mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+  function eff(){
+    const a=root.getAttribute('data-theme');
+    if(a==='dark'||a==='light') return a;
+    return mq&&mq.matches?'dark':'light';
+  }
+  function sync(){
+    const e=eff();
+    btn.dataset.eff=e;
+    const label=e==='dark'?'Yorug\' rejimga o\'tish':'Qorong\'i rejimga o\'tish';
+    btn.setAttribute('aria-label',label);btn.title=label;
+  }
+  try{const s=localStorage.getItem('kvw-theme');if(s==='dark'||s==='light') root.setAttribute('data-theme',s)}catch(e){}
+  btn.addEventListener('click',function(){
+    const n=eff()==='dark'?'light':'dark';
+    root.setAttribute('data-theme',n);
+    try{localStorage.setItem('kvw-theme',n)}catch(e){}
+    sync();
+  });
+  if(mq&&mq.addEventListener) mq.addEventListener('change',sync);
+  try{new MutationObserver(sync).observe(root,{attributes:true,attributeFilter:['data-theme']})}catch(e){}
+  sync();
+})();
+
+/* ---------- swipe through flashcards ---------- */
+(function(){
+  let sx=null,sy=null;
+  const v=$('#view');
+  v.addEventListener('touchstart',function(e){
+    if(state.view!=='cards'||!e.touches[0]) return;
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;
+  },{passive:true});
+  v.addEventListener('touchend',function(e){
+    if(sx===null) return;
+    const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+    sx=null;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5) fcGo(dx<0?fc.i+1:fc.i-1);
+  },{passive:true});
+})();
+
+/* ---------- install as an app (PWA) ---------- */
+(function(){
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){});
+    });
+  }
+  const btn=$('#install'),hint=$('#installHint');
+  let deferred=null;
+  const isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;btn.hidden=false});
+  if(isiOS&&!window.navigator.standalone) btn.hidden=false;
+  btn.addEventListener('click',function(){
+    if(deferred){deferred.prompt();deferred=null;btn.hidden=true;return}
+    if(isiOS&&hint){hint.hidden=false;return}
+  });
+})();
+
+refresh();
+</script>
+
+</body></html>
